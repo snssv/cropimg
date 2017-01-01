@@ -1,0 +1,113 @@
+@font-face
+    font-family 'cropimg' 
+    src  url('../fonts/cropimg.ttf?df7qzm') 
+    font-weight normal 
+    font-style normal
+$w=40px
+
+.cropbox
+    width 100%
+    height 100%
+    position fixed
+    font-size 20px
+    top 0
+    left 0
+    background url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDY3IDc5LjE1Nzc0NywgMjAxNS8wMy8zMC0yMzo0MDo0MiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NEFBQjMxOUFDNzEwMTFFNjhFRUM5NDA5OUI2MEQ0QUQiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NEFBQjMxOUJDNzEwMTFFNjhFRUM5NDA5OUI2MEQ0QUQiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo0QUFCMzE5OEM3MTAxMUU2OEVFQzk0MDk5QjYwRDRBRCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo0QUFCMzE5OUM3MTAxMUU2OEVFQzk0MDk5QjYwRDRBRCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PgCC2SkAAAC3SURBVHja7NwxDQAgDEXBQvDvCwNMeClIYC73HDSXv7bNvTJq1Coc0UNABASIgAARECACAkRABASIgAARECACAkRABASIgAARECACAkRABASIgAARECACAkRABASIgAARECACAkRABASIHhtR5BPbLS1EQIAICBABERAgAgJEQIAICBABERAgAgJEQIAICBABERAgAgJEQIAICBABERAgAgJEQIAICBABERAgAgJEQIAIyFcdAQYAPUQFRY23UgMAAAAASUVORK5CYII=")
+    background-size 10px 10px
+    .cropControls
+    .addimg
+        position absolute
+        z-index 999
+        top 5px
+        height $w
+    .addimg
+        left 5px
+        width $w
+        input
+            position absolute
+            top 0
+            left 0
+            width 100%
+            height 100%
+            opacity .0001
+    .cropControls
+        right 5px
+    i
+        font-family 'cropimg' !important 
+        speak none 
+        font-style normal 
+        font-weight normal 
+        font-variant normal 
+        text-transform none 
+        display inline-block
+        cursor pointer
+        text-align center
+        width $w
+        height $w
+        color #fff
+        background-color rgba(0,0,0,0.35)
+        border-radius 10%
+        border 1px solid #fff
+        &:hover
+            background-color rgba(0,0,0,0.7)
+        &:before
+            display inline-block
+            line-height $w
+
+
+    .cropControlZoomMuchIn
+    .cropControlZoomMuchOut
+    .cropControlRotateRight
+    .cropControlReset
+        display none
+
+
+    .cropControlZoomIn
+    .cropControlZoomMuchIn
+    .icon-plus
+        &:before
+            content "\e900"
+    .cropControlZoomOut
+    .cropControlZoomMuchOut
+    .icon-minus
+        &:before
+            content "\e901"
+    .icon-picture:before
+        content "\e902" 
+    .icon-cancel:before
+        content "\e903"
+    .cropControlCrop
+    .icon-crop
+        &:before
+            content "\e904"
+    .cropControlRemoveCroppedImage
+    .icon-floppy
+        &:before
+            content "\e905"
+    .icon-download:before
+        content "\e960"
+    .cropControlUpload
+    .icon-upload
+        &:before
+            content "\e961"
+    .cropControlRotateLeft
+    .icon-undo
+        &:before
+            content "\e965"
+    .cropControlRotateRight
+    .icon-redo
+        &:before
+            content "\e966"
+    .icon-undo2:before
+        content "\e967" 
+    .icon-redo2:before
+        content "\e968" 
+    .icon-spinner:before
+        content "\e97a" 
+
+.crop_box
+    img
+        max-width 100%
+        max-height 100%
+
+@import 'com'

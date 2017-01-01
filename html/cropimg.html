@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" type="text/css" href="../css/cropimg.css?v1483265019850">
+    <meta name="format-detection" content="telephone=no">
+    <script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="../js/cropimg.min.js"></script>
+    <title>森林城市</title>
+  </head>
+  <body>
+    <div id="cropbox" class="cropbox">
+      <div class="addimg"><i class="icon-picture"></i>
+        <input id="uploadImage" type="file" accept="image/*" capture="camera">
+      </div>
+      <div id="image-editor"></div>
+    </div>
+    <script type="text/javascript">
+      $(function(){
+          //--获取窗口高度及宽度，尽量别超出窗口。
+          var _e_width = $('#cropbox').width();
+          var _e_height = $('#cropbox').height();
+          //--这是控件的课配置参数。
+          var opts = {
+              cutWidth: 140 //裁剪框的宽度。
+              , cutHeight: 200 //裁剪框的高度
+              , containerWidth: _e_width //容器宽度
+              , containerHeight: _e_height //容器高度
+              , imageShowWidth: 300 //图片默认显示的宽度【会按照要求的宽度及高度等比缩放】
+              , imageShowHeight: 300 //图片默认显示的高度【会按照要求的宽度及高度等比缩放】
+              ,imageEditorElement:$("#image-editor")
+              ,onSave:function(imgData){
+                  /*$.ajax({
+                      url:"/service/saveBase64Image.jsp"
+                      ,data:{
+                          file:imgData
+                      }
+                      ,method:"post"
+                      ,dataType:"json"
+                      ,success:function(sdata){
+                          _imageHandler.hideEditor();
+                          if(sdata.error==0){
+                              $("#usercenter_avatar").attr("src",imgData);
+                              $("#preview-image").attr("src",sdata.url);
+                              var _notice=new NotificationFx({
+                                  type:"success"
+                                  ,message:"成功修改头像"
+                              });
+                              _notice.show();
+                          }
+                          else{
+                              var _notice=new NotificationFx({
+                                  type:"error"
+                                  ,message:sdata.message
+                              });
+                              _notice.show();
+                          }
+                      }
+      
+                  });*/
+              }//当用户点击保存按钮要保存图片数据时候的回调函数。
+              ,onBtnResetClick:function(){
+                  if(_imageHandler){
+                      _imageHandler.hideEditor();
+                  }
+                  $("#panel-form").show();
+              }//reset按钮点击以后。
+              ,tpl: "../js/power-img-cut.ejs"
+      
+          };
+      
+          var _imageHandler=ImageEditorHandler(opts);
+      
+          //--逻辑方法定义
+          $("#uploadImage").change(function(){
+      
+              if (document.getElementById("uploadImage").files.length === 0) {
+                  alert("请选择图片！");
+                  return; }
+              var oFile = document.getElementById("uploadImage").files[0];
+              //if (!rFilter.test(oFile.type)) { alert("You must select a valid image file!"); return; }
+      
+              /*  if(oFile.size>5*1024*1024){
+               message(myCache.par.lang,{cn:"照片上传：文件不能超过5MB!请使用容量更小的照片。",en:"证书上传：文件不能超过100K!"})
+               changePanel("result");
+               return;
+               }*/
+              if(!new RegExp("(jpg|jpeg|gif|png)+","gi").test(oFile.type)){
+                  alert("照片上传：文件类型必须是JPG、JPEG、PNG或GIF!");
+                  return;
+              }
+      
+              var reader = new FileReader();
+      
+              reader.onload =function(e){
+                  var _img_str=e.target.result;
+                  // img 元素
+                  $("#panel-form").hide();
+                  _imageHandler.init(_img_str,oFile);
+      
+              };
+              reader.readAsDataURL(oFile);
+                  return;
+              });
+          }
+      );
+    </script>
+  </body>
+</html>

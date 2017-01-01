@@ -1,0 +1,10 @@
+*.DS_Store
+*.idea
+.idea/
+.idea/*
+css/_*
+html/_*
+watcherTasks.xml
+node_modules/
+node_modules/*
+src/media/*

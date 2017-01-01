@@ -1,0 +1,147 @@
+
+
+@font-face {
+    font-family: 'icomoon';
+    src:    url('../fonts/icon.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+    font-family: 'icomoon' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+html,body
+    width 100%
+    height 100%
+body
+
+    margin 0
+    font-family 'PingFang SC',"STYuanti SC Regular"
+    font-weight light
+    line-height 1.2
+    -webkit-user-select: none; /*webkit浏览器*/
+    -moz-user-select: none; /*火狐*/
+    -ms-user-select: none; /*IE10*/
+    user-select: none
+    -webkit-touch-callout:none
+    touch-callout:none
+    font-size .24rem
+
+    *
+        -webkit-box-sizing border-box
+        box-sizing border-box
+        margin 0
+    div,a,img,span
+        -webkit-user-select: none !important
+        -moz-user-select: none !important
+        -ms-user-select: none !important
+        -webkit-touch-callout: none !important
+        touch-callout:none !important
+
+    > a
+        display none
+        position fixed
+a
+    text-decoration none
+#container
+    position fixed
+    width 100%
+    top 0
+    bottom 2.2rem
+    overflow-x hidden
+    overflow-y auto
+    transition all .5s
+ul
+    list-style none
+    padding 0
+
+img
+    max-width 100%
+    max-height 100%
+    vertical-align middle
+.log
+    bg()
+    position fixed
+    background rgba(0,0,90,.03)
+    z-index 50
+    width 20%
+    height 100%
+    font-size .14rem
+    color #fff
+    display none
+    p
+        margin .05rem
+
+.loader
+    font-size: 0;
+    position: fixed;
+    z-index 10
+    text-indent: -9rem;
+    border 0.15rem solid rgba(250, 250, 250, 0.3)
+    border-left-color: #fff
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-animation: load8 0.5s infinite linear;
+    animation: load8 0.5s infinite linear;
+    box-shadow 0 0 .02rem rgba(0,0,0,.3)
+    top: 40%;
+    left: 50%;
+    margin-left: -.8rem;
+    display none
+
+.loader,
+.loader:after
+    border-radius: 50%;
+    width: 1.6rem;
+    height: 1.6rem;
+.loading
+    &:before
+        content ''
+        position fixed
+        z-index 9
+        width 100%
+        height 100%
+        background rgba(0,0,0,.1)
+    .loader
+        display block
+
+@-webkit-keyframes load8
+    0%
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    100%
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+
+@keyframes load8
+    0%
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    100%
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+
+
+.btn_gr
+    position fixed
+    z-index 2
+    right .2rem
+    top .2rem
+    display table
+    background $lv
+    .btns
+        display table-cell
+        padding .1rem .5rem
+        color #fff
+        cursor pointer
+    a
+        border-left 10px solid #fff
