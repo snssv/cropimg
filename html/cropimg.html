@@ -3,108 +3,192 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <link rel="stylesheet" type="text/css" href="../css/cropimg.css?v1483284006017">
+    <link rel="stylesheet" type="text/css" href="../css/cropimg.css?v1508334757711">
     <meta name="format-detection" content="telephone=no">
     <script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
     <script type="text/javascript" src="../js/cropimg.min.js"></script>
     <title>图片裁剪</title>
   </head>
   <body>
-    <div id="cropbox" class="cropbox">
-      <div class="addimg"><i class="icon-picture"></i>
-        <input id="uploadImage" type="file" accept="image/*" capture="camera">
+    <div class="loader_bg">
+      <div class="loader"></div>
+    </div>
+    <header id="header" class="navbar navbar-fixed-top"></header>
+    <div id="body">
+      <div onclick="initCrop(1,2)" class="btn">
+        <label for="uploadImage">点这里上传照片</label>
       </div>
+    </div>
+    <div id="cropbox" class="cropbox">
+      <div class="addimg"><i class="icon-image"></i>
+        <input id="uploadImage" type="file" accept="image/*" capture="camera">
+      </div><i onclick="$('#cropbox').hide();" class="close icon-arrow-left-o"></i>
       <div id="image-editor"></div>
     </div>
+    <div class="zoom_img">
+      <canvas id="compressCanvas"></canvas><img id="compressSource">
+    </div>
     <script type="text/javascript">
-      $(function(){
-          //--获取窗口高度及宽度，尽量别超出窗口。
-          var _e_width = $('#cropbox').width();
-          var _e_height = $('#cropbox').height();
-          //--这是控件的课配置参数。
-          var opts = {
-              cutWidth: 140 //裁剪框的宽度。
-              , cutHeight: 200 //裁剪框的高度
-              , containerWidth: _e_width //容器宽度
-              , containerHeight: _e_height //容器高度
-              , imageShowWidth: 300 //图片默认显示的宽度【会按照要求的宽度及高度等比缩放】
-              , imageShowHeight: 300 //图片默认显示的高度【会按照要求的宽度及高度等比缩放】
-              ,imageEditorElement:$("#image-editor")
-              ,onSave:function(imgData){
-                  /*$.ajax({
-                      url:"/service/saveBase64Image.jsp"
-                      ,data:{
-                          file:imgData
-                      }
-                      ,method:"post"
-                      ,dataType:"json"
-                      ,success:function(sdata){
-                          _imageHandler.hideEditor();
-                          if(sdata.error==0){
-                              $("#usercenter_avatar").attr("src",imgData);
-                              $("#preview-image").attr("src",sdata.url);
-                              var _notice=new NotificationFx({
-                                  type:"success"
-                                  ,message:"成功修改头像"
-                              });
-                              _notice.show();
+      (function (doc, win) {
+          var docEl = doc.documentElement,
+              resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+              recalc = function () {
+                  var clientWidth = docEl.clientWidth, jz = 100;
+                  if (clientWidth >= 1000) {
+                      clientWidth = 1000;
+                  } else if (clientWidth < 1000 && clientWidth >= 800) {
+                      jz = 110
+                  } else if (clientWidth < 800 && clientWidth >= 600) {
+                      jz = 120
+                  } else if (clientWidth < 600 && clientWidth >= 400) {
+                      jz = 180
+                  } else {
+                      jz = 220
+                  }
+                  if (clientWidth >= 600) {
+                      $('html').removeClass('is_mob').addClass('is_pc')
+                  } else {
+                      $('html').addClass('is_mob').removeClass('is_pc')
+                  }
+                  if (!clientWidth) return;
+                  docEl.style.fontSize = jz * (clientWidth / 1280) + 'px';
+              };
+          if (!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+      })(document, window);
+      
+      function loading(t) {
+          if (t) {
+              $('body').removeClass('loading');
+          } else {
+              $('body').addClass('loading');
+          }
+      }
+      var up_name = "avatar";
+      var up_type = 0; //0my,1clan,2people
+      
+      //--获取窗口高度及宽度，尽量别超出窗口。
+      var _e_width = $('#cropbox').width();
+      var _e_height = $('#cropbox').height();
+      //--这是控件的课配置参数。
+      var opts = {
+          cutWidth: 120 //裁剪框的宽度。
+          , cutHeight: 120 //裁剪框的高度
+          , containerWidth: _e_width //容器宽度
+          , containerHeight: _e_height //容器高度
+          , imageShowWidth: 300 //图片默认显示的宽度【会按照要求的宽度及高度等比缩放】
+          , imageShowHeight: 300 //图片默认显示的高度【会按照要求的宽度及高度等比缩放】
+          , imageEditorElement: $("#image-editor")
+          , onSave: function (imgData) {
+              console.log(imgData.length);//打印裁剪压缩后的文件大小
+              // console.log(imgData);
+              compressImg(imgData, function (vd) {
+                  loading();
+                  $.ajax({
+                      url: "/post/upload_base64",
+                      data: {
+                          file: vd,
+                          name: up_name
+                      },
+                      method: "post",
+                      dataType: "json",
+                      success: function (ret) {
+                          // _imageHandler.hideEditor();
+                          console.log(ret);
+                          loading(1);
+                          if (ret.code == 200) {
+                              $('#cropbox').fadeOut();
+                              if (up_type == 0) {
+                                  vCont.head[up_name] = ret.data;
+                                  update(up_name);
+                              } else {
+                                  veCont.item.avatar = ret.data;
+                              }
                           }
-                          else{
-                              var _notice=new NotificationFx({
-                                  type:"error"
-                                  ,message:sdata.message
-                              });
-                              _notice.show();
-                          }
+                      },
+                      error: function (ret) {
+      
                       }
       
-                  });*/
-              }//当用户点击保存按钮要保存图片数据时候的回调函数。
-              ,onBtnResetClick:function(){
-                  if(_imageHandler){
-                      _imageHandler.hideEditor();
-                  }
-                  $("#panel-form").show();
-              }//reset按钮点击以后。
-              ,tpl: "../js/power-img-cut.ejs"
+                  });
+              });
+      
+          }//当用户点击保存按钮要保存图片数据时候的回调函数。
+          , onBtnResetClick: function () {
+              if (_imageHandler) {
+                  _imageHandler.hideEditor();
+              }
+              $("#panel-form").show();
+          }//reset按钮点击以后。
+          , tpl: "../js/power-img-cut.ejs"
+      
+      };
+      
+      var _imageHandler = ImageEditorHandler(opts);
+      
+      //--逻辑方法定义
+      $("#uploadImage").change(function () {
+          if (document.getElementById("uploadImage").files.length === 0) {
+              console.log("请选择图片！");
+              return;
+          }
+          var oFile = document.getElementById("uploadImage").files[0];
+          if (!new RegExp("(jpg|jpeg|gif|png)+", "gi").test(oFile.type)) {
+              console.log("照片上传：文件类型必须是JPG、JPEG、PNG或GIF!");
+              return;
+          }
+          var reader = new FileReader();
+          reader.onload = function (e) {
+              var _img_str = e.target.result;
+              // img 元素
+              $("#panel-form").hide();
+              _imageHandler.init(_img_str, oFile);
       
           };
+          reader.readAsDataURL(oFile);
+          return;
+      });
       
-          var _imageHandler=ImageEditorHandler(opts);
-      
-          //--逻辑方法定义
-          $("#uploadImage").change(function(){
-      
-              if (document.getElementById("uploadImage").files.length === 0) {
-                  alert("请选择图片！");
-                  return; }
-              var oFile = document.getElementById("uploadImage").files[0];
-              //if (!rFilter.test(oFile.type)) { alert("You must select a valid image file!"); return; }
-      
-              /*  if(oFile.size>5*1024*1024){
-               message(myCache.par.lang,{cn:"照片上传：文件不能超过5MB!请使用容量更小的照片。",en:"证书上传：文件不能超过100K!"})
-               changePanel("result");
-               return;
-               }*/
-              if(!new RegExp("(jpg|jpeg|gif|png)+","gi").test(oFile.type)){
-                  alert("照片上传：文件类型必须是JPG、JPEG、PNG或GIF!");
-                  return;
+      function initCrop(i, t) {
+          up_type = t;
+          if (i == 1) {
+              opts.cutWidth = 160;
+              opts.cutHeight = 160;
+              up_name = "avatar";
+          } else {
+              if ($('body').width() < 800) {
+                  opts.cutWidth = 300;
+                  opts.cutHeight = 80;
+              } else {
+                  opts.cutWidth = 600;
+                  opts.cutHeight = 160;
               }
-      
-              var reader = new FileReader();
-      
-              reader.onload =function(e){
-                  var _img_str=e.target.result;
-                  // img 元素
-                  $("#panel-form").hide();
-                  _imageHandler.init(_img_str,oFile);
-      
-              };
-              reader.readAsDataURL(oFile);
-                  return;
-              });
+              up_name = "banner";
           }
-      );
+          _imageHandler = ImageEditorHandler(opts);
+          $('#cropbox').show();
+      }
+      
+      //再次canvas压缩
+      function compressImg(data, callback) {
+          var canvas = document.getElementById('compressCanvas');
+          var source = document.getElementById('compressSource');
+          source.onload = function () {
+              var w = 400, h = 400;//最终裁剪的照片尺寸 px
+              if (up_name == 'banner') {
+                  w = 1500;
+              }
+              var context = canvas.getContext('2d');
+              canvas.width = w;
+              canvas.height = h;
+              context.drawImage(source, 0, 0, w, h);
+              var compressData = canvas.toDataURL('image/jpeg', 0.92);
+              console.log(compressData.length);
+              callback(compressData);
+          };
+          source.src = data;
+      }
     </script>
   </body>
 </html>
